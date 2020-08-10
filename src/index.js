@@ -1,12 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { Provider } from 'react-redux';
+import Store from './Store/Store'
 import App from './App';
+import 'react-toastify/dist/ReactToastify.css';
 import * as serviceWorker from './serviceWorker';
+
+const IndexApp = () => {
+  return (
+      <Provider store={Store}>
+        <App/>
+      </Provider>
+  )
+}
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <IndexApp />
   </React.StrictMode>,
   document.getElementById('root')
 );
