@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { singUpDataAction } from "./Store/action";
 import RefreshIcon from "@material-ui/icons/Refresh";
@@ -69,7 +69,7 @@ export default () => {
     State: "",
   });
   const [errors, setError] = useState(false);
-  const didMount = useRef(false);
+
   const selectLanguage = [
     "Hindi",
     "English",
@@ -168,6 +168,14 @@ export default () => {
 
   const callBackConfirmation = (response) => {
     if (response == "done") {
+      setAddress({State:'',city:''})
+      setLanguage('')
+      setEmail('')
+      setFirstName('')
+      setLastName('')
+      setMarried(false)
+      setPassword('')
+      setAge('')
       toast.success("Sign Up Done", {
         position: "top-right",
         autoClose: 5000,
@@ -177,6 +185,7 @@ export default () => {
         draggable: true,
         progress: undefined,
       });
+     
     } else {
       toast.error("something go wrong!", {
         position: "top-right",
@@ -211,6 +220,8 @@ export default () => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
   };
+
+ 
 
   return (
     <Container component="main" maxWidth="xs">
@@ -401,6 +412,7 @@ export default () => {
                     <Checkbox
                       value="allowExtraEmails"
                       color="primary"
+                      checked={married ? true :false}
                       onChange={(e) => setMarried(!married)}
                     />
                   }
