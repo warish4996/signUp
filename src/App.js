@@ -21,39 +21,10 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import ErrorIcon from "@material-ui/icons/Error";
-import { makeStyles } from "@material-ui/core/styles";
+import useStyles from './AppCss';
 import { ToastContainer, toast } from "react-toastify";
 
-const useStyles = makeStyles((theme) => ({
-  upperPaper: {
-    marginTop: theme.spacing(6),
-    marginBottom: theme.spacing(6),
-    padding: 10,
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  formControl: {
-    minWidth: "100%",
-  },
-  errorMsg: {
-    margin: "10px 0px",
-    color: "red",
-  },
-}));
+
 
 export default () => {
   const classes = useStyles();
@@ -199,17 +170,7 @@ export default () => {
     }
   };
 
-  console.log(
-    language,
-    firstName,
-    lastName,
-    age,
-    email,
-    password,
-    married,
-    address,
-    "hi"
-  );
+  
   const refresh = () => {
     if (window.confirm("are you sure want to refresh ?")) {
       window.location.reload();

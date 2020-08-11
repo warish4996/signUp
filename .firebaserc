@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "signup-fd83d"
+    "default": "signup-fd83d",
+    "hosting": "signup-559d2",
+    "staging": "signup-559d2"
   }
 }
