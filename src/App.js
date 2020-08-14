@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
-import { singUpDataAction } from "./Store/action";
+import { postSingUpData,getAllSingUpData,EditSingUpData } from "./Store/action";
+import { useHistory,useLocation } from 'react-router-dom'
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
   CssBaseline,
@@ -27,19 +28,24 @@ import { ToastContainer, toast } from "react-toastify";
 
 
 export default () => {
+  const location= useLocation()
+  const {state ={}}=location
+  const {res ={}}=state
   const classes = useStyles();
-  const [language, setLanguage] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [age, setAge] = useState("");
-  const [married, setMarried] = useState(false);
+  const [language, setLanguage] = useState(res.language ? res.language:'');
+  const [firstName, setFirstName] = useState(res.name? res.name.replace(/ .*/,''):'');
+  const [lastName, setLastName] = useState(res.name? res.name.split(" ").pop():"");
+  const [email, setEmail] = useState(res.email ? res.email:"");
+  const [password, setPassword] = useState(res.password ? res.password:"");
+  const [age, setAge] = useState(res.age ? res.age :'');
+  const [married, setMarried] = useState(res.married ? res.married:false);
   const [address, setAddress] = useState({
-    city: "",
-    State: "",
+    city: res.city ? res.city:"",
+    State: res.stte ? res.stte:"",
   });
   const [errors, setError] = useState(false);
+  
+  const history = useHistory()
 
   const selectLanguage = [
     "Hindi",
@@ -131,14 +137,25 @@ export default () => {
         age: age,
         language: language,
         married: married,
-        address: address,
+        stte: address.State,
+        city:address.city
       };
-      dispatch(singUpDataAction(paylod, callBackConfirmation));
+      if(res.name && res.email && res.age && res.language){
+        dispatch(EditSingUpData(paylod,res._id, callBackConfirmation));
+      }else{
+      dispatch(postSingUpData(paylod, callBackConfirmation));
+      }
     }
   };
 
+  useEffect(() => {
+    dispatch(getAllSingUpData())
+  }, []);
+
   const callBackConfirmation = (response) => {
-    if (response == "done") {
+    let msg = response.config.method.post ? "Sign Up Done":"Edit Done"
+    if (response && response.status === 200) {
+      dispatch(getAllSingUpData())
       setAddress({State:'',city:''})
       setLanguage('')
       setEmail('')
@@ -147,7 +164,7 @@ export default () => {
       setMarried(false)
       setPassword('')
       setAge('')
-      toast.success("Sign Up Done", {
+      toast.success(msg, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -182,6 +199,10 @@ export default () => {
     setAddress({ ...address, [name]: value });
   };
 
+  const handleShowData =(e)=>{
+    e.preventDefault()
+    history.push('/data')
+  }
  
 
   return (
@@ -386,10 +407,19 @@ export default () => {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
               onClick={handleData}
             >
-              Sign Up
+              Save
+            </Button>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={(e)=>handleShowData(e)}
+            >
+              Show Data
             </Button>
           </div>
         </div>

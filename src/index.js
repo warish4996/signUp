@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import './index.css';
 import { Provider } from 'react-redux';
 import Store from './Store/Store'
 import App from './App';
+import Signdata from './signData'
 import 'react-toastify/dist/ReactToastify.css';
 import * as serviceWorker from './serviceWorker';
 
 const IndexApp = () => {
   return (
       <Provider store={Store}>
-        <App/>
+          <Router>
+                    <Switch>
+                        <Route path='/' exact component={App} />
+                        <Route path='/data' exact component={Signdata} />      
+                    </Switch>
+                        <Redirect to="/" exact />
+                </Router>
       </Provider>
   )
 }
