@@ -1,17 +1,26 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom'
 import { useSelector,useDispatch} from "react-redux";
 import { getAllSingUpData,deleteSingUpData } from "./Store/action";
-import {Button,Table} from '@material-ui/core';
+import {
+  CssBaseline,
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  Container,
+} from "@material-ui/core";
+import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import SearchIcon from '@material-ui/icons/Search';
 import { ToastContainer, toast } from "react-toastify";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -50,6 +59,7 @@ export default ()=> {
   let history = useHistory()
   const allData = useSelector(state => state.reducer.singUpData) || []
   const classes = useStyles();
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     dispatch(getAllSingUpData())
@@ -91,7 +101,34 @@ export default ()=> {
 
   return (
     <>
-    <TableContainer component={Paper}>
+
+<Container component="main" maxWidth="xs" style={{marginBottom:'50px',marginTop:'10px'}}>
+      <ToastContainer />
+      <CssBaseline />
+      <Paper elevation={3} className={classes.upperPaper}>
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5" style={{padding:'10px'}}>
+            <SearchIcon/>Search by Name
+          </Typography>
+          <div className={classes.form} style={{padding:'10px'}}>
+              <Grid item xs={12} s>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  type="text"
+                  id="search"
+                  label="Search"
+                  name="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoComplete="age"
+                />
+              </Grid>
+          </div>
+        </div>
+      </Paper>
+    </Container>
+    <TableContainer component={Paper} style={{padding:'40px'}}>
       <ToastContainer />
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
@@ -106,7 +143,8 @@ export default ()=> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {allData.map(res=>
+        {allData
+        .filter(name=>name.name.toLowerCase().indexOf(search.toLowerCase()) >=0).map(res=>
             <StyledTableRow key={res._id}>
             <StyledTableCell component="th" scope="row">
               {res.name}
